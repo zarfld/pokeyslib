@@ -246,6 +246,37 @@ int32_t PK_PoRelay8_SetOutputsArray(sPoKeysDevice* device)
     return SendRequest(device);
 }
 
+int32_t PK_PoRelay8_SetOutputsX1(sPoKeysDevice* device, uint8_t OutPuts)
+{
+    if (device == NULL) return PK_ERR_NOT_CONNECTED;
+
+
+    CreateRequest(device->request, 0x7B, 0x20, 0, 0, 0);
+    device->request[3] = OutPuts;
+
+    return SendRequest(device);
+}
+
+int32_t PK_PoRelay8_SetOutputsX10(sPoKeysDevice* device, uint8_t OutPuts[10])
+{
+    if (device == NULL) return PK_ERR_NOT_CONNECTED;
+
+
+    CreateRequest(device->request, 0x7B, 0x21, 0, 0, 0);
+    device->request[3] = OutPuts[0];
+    device->request[4] = OutPuts[1];
+    device->request[5] = OutPuts[2];
+    device->request[6] = OutPuts[3];
+    device->request[7] = OutPuts[4];
+    device->request[8] = OutPuts[5];
+    device->request[9] = OutPuts[6];
+    device->request[10] = OutPuts[7];
+    device->request[11] = OutPuts[8];
+    device->request[12] = OutPuts[9];
+
+    return SendRequest(device);
+}
+
 int32_t PK_PoRelay8_ReEnablePoExtBus(sPoKeysDevice* device)
 {
     if (device == NULL) return PK_ERR_NOT_CONNECTED;
