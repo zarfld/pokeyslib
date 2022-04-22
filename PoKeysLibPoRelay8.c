@@ -76,11 +76,11 @@ int32_t PK_PoRelay8_DeviceIdentification(sPoKeysDevice* device)
 
     //ans[0] - Address  0x7B (R)
     //ans[1] - STATUS   (0x1A)
-    device->PoRelay8.TYPE[0] = device->response[2];      // TYPE_1 (10)
-    device->PoRelay8.TYPE[1] = device->response[3];      // TYPE_2 (1)
-    device->PoRelay8.FW_ver[0] = device->response[4];    // FW_ver_1 
-    device->PoRelay8.FW_ver[1] = device->response[5];    // FW_ver_2 
-    device->PoRelay8.DeviceID = device->response[6];     // Device ID   (32 - bit)
+    device->PoRelay8->TYPE[0] = device->response[2];      // TYPE_1 (10)
+    device->PoRelay8->TYPE[1] = device->response[3];      // TYPE_2 (1)
+    device->PoRelay8->FW_ver[0] = device->response[4];    // FW_ver_1 
+    device->PoRelay8->FW_ver[1] = device->response[5];    // FW_ver_2 
+    device->PoRelay8->DeviceID = device->response[6];     // Device ID   (32 - bit)
 }
 
 
@@ -127,31 +127,31 @@ int32_t PK_PoRelay8_ConfigurationRead(sPoKeysDevice* device) // Retrieves I2C bu
         {
             case 0:
                 //0 Device's I2C address 0x7B
-                device->PoRelay8.i2cAddress = device->response[3];
+                device->PoRelay8->i2cAddress = device->response[3];
             case 1:
                 //1 PoExtBus daisy-chain position (data index) 0
-                device->PoRelay8.PoExtBus_Position = device->response[3];
+                device->PoRelay8->PoExtBus_Position = device->response[3];
             case 2:
                 //2 CAN daisy-chain position (data index)
-                device->PoRelay8.CAN_Position = device->response[3];
+                device->PoRelay8->CAN_Position = device->response[3];
             case 3:
                 //3 Number of PoRelay8 devices on CAN bus (additional CAN frames are sent if more than 8 PoRelay8 devices present)
-                device->PoRelay8.CAN_PoRelayCount = device->response[3];
+                device->PoRelay8->CAN_PoRelayCount = device->response[3];
             case 4:
                 //4 Failsafe timeout (in ms)
-                device->PoRelay8.Failsafe_timeout = device->response[3];
+                device->PoRelay8->Failsafe_timeout = device->response[3];
             case 5:
                 //5 Disable CRC check on PoExtBus
-                device->PoRelay8.DisableCRC = device->response[3];
+                device->PoRelay8->DisableCRC = device->response[3];
             case 6:
                 //6 CAN bus timing option
-                device->PoRelay8.CAN_TimingOption = device->response[3];
+                device->PoRelay8->CAN_TimingOption = device->response[3];
             case 7:
                 //7 CAN bus message ID 0x108
-                device->PoRelay8.CAN_MessageID = device->response[3];
+                device->PoRelay8->CAN_MessageID = device->response[3];
             case 8:
                 //8 PoIL master enable switch and PoIL core ID 0
-                device->PoRelay8.POIL_MasterEnable = device->response[3];
+                device->PoRelay8->POIL_MasterEnable = device->response[3];
         }
     }
 
@@ -174,31 +174,31 @@ int32_t PK_PoRelay8_ConfigurationWrite(sPoKeysDevice* device)
         {
         case 0:
             //0 Device's I2C address 0x7B
-            device->response[3] = device->PoRelay8.i2cAddress;
+            device->response[3] = device->PoRelay8->i2cAddress;
         case 1:
             //1 PoExtBus daisy-chain position (data index) 0
-            device->response[3] = device->PoRelay8.PoExtBus_Position;
+            device->response[3] = device->PoRelay8->PoExtBus_Position;
         case 2:
             //2 CAN daisy-chain position (data index)
-            device->response[3] = device->PoRelay8.CAN_Position;
+            device->response[3] = device->PoRelay8->CAN_Position;
         case 3:
             //3 Number of PoRelay8 devices on CAN bus (additional CAN frames are sent if more than 8 PoRelay8 devices present)
-            device->response[3] device->PoRelay8.CAN_PoRelayCount;
+            device->response[3] device->PoRelay8->CAN_PoRelayCount;
         case 4:
             //4 Failsafe timeout (in ms)
-            device->response[3] = device->PoRelay8.Failsafe_timeout;
+            device->response[3] = device->PoRelay8->Failsafe_timeout;
         case 5:
             //5 Disable CRC check on PoExtBus
-            device->response[3] = device->PoRelay8.DisableCRC;
+            device->response[3] = device->PoRelay8->DisableCRC;
         case 6:
             //6 CAN bus timing option
-            device->response[3] = device->PoRelay8.CAN_TimingOption;
+            device->response[3] = device->PoRelay8->CAN_TimingOption;
         case 7:
             //7 CAN bus message ID 0x108
-            device->response[3] = device->PoRelay8.CAN_MessageID;
+            device->response[3] = device->PoRelay8->CAN_MessageID;
         case 8:
             //8 PoIL master enable switch and PoIL core ID 0
-            device->response[3] = device->PoRelay8.POIL_MasterEnable;
+            device->response[3] = device->PoRelay8->POIL_MasterEnable;
         }
         chkSum = getChecksum(device->request);
         device->request[12] = chkSum;
@@ -221,7 +221,7 @@ int32_t PK_PoRelay8_SetOutputs(sPoKeysDevice* device)
     if (device == NULL) return PK_ERR_NOT_CONNECTED;
 
     CreateRequest(device->request, 0x7B, 0xA5, 0, 0, 0);
-    device->request[3] = device->PoRelay8.statusOut;
+    device->request[3] = device->PoRelay8->statusOut;
     return SendRequest(device);
 }
 
