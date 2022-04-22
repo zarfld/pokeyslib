@@ -1287,7 +1287,7 @@ POKEYSDECL int32_t PK_PoRelay8_SetOutputsArray(sPoKeysDevice* device);
 POKEYSDECL int32_t PK_PoRelay8_ReEnablePoExtBus(sPoKeysDevice* device);
 
 POKEYSDECL int32_t PK_PoRelay8_POILcommand(sPoKeysDevice* device, uint8_t CanMsgId,  uint8_t CanMsgData);
-POKEYSDECL int32_t PK_PoRelay8_SendMessage2CanBus(sPoKeysDevice* device);
+POKEYSDECL int32_t PK_PoRelay8_SendMessage2CanBus(sPoKeysDevice* device, uint8_t Flags, uint8_t CanMsgId, uint8_t CanMsgData);
 POKEYSDECL int32_t PK_PoRelay8_CanStateUpdate(sPoKeysDevice* device);
 POKEYSDECL int32_t PK_PoRelay8_CanStateUpdate2(sPoKeysDevice* device);
 POKEYSDECL int32_t PK_PoRelay8_CanStateUpdateSingle(sPoKeysDevice* device);
