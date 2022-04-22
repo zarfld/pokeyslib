@@ -183,7 +183,7 @@ int32_t PK_PoRelay8_ConfigurationWrite(sPoKeysDevice* device)
             device->response[3] = device->PoRelay8->CAN_Position;
         case 3:
             //3 Number of PoRelay8 devices on CAN bus (additional CAN frames are sent if more than 8 PoRelay8 devices present)
-            device->response[3] device->PoRelay8->CAN_PoRelayCount;
+            device->response[3] = device->PoRelay8->CAN_PoRelayCount;
         case 4:
             //4 Failsafe timeout (in ms)
             device->response[3] = device->PoRelay8->Failsafe_timeout;
@@ -220,7 +220,7 @@ int32_t PK_PoRelay8_SetOutputs(sPoKeysDevice* device)
 {
     if (device == NULL) return PK_ERR_NOT_CONNECTED;
 
-    CreateRequest(device->request, 0x7B, 0xA5, 0, 0, 0);
+    CreateRequest(device->request, 0x7B, 0x20, 0, 0, 0);
     device->request[3] = device->PoRelay8->statusOut[0];
 
     return SendRequest(device);
@@ -231,7 +231,7 @@ int32_t PK_PoRelay8_SetOutputsArray(sPoKeysDevice* device)
     if (device == NULL) return PK_ERR_NOT_CONNECTED;
 
 
-    CreateRequest(device->request, 0x7B, 0xA5, 0, 0, 0);
+    CreateRequest(device->request, 0x7B, 0x21, 0, 0, 0);
     device->request[3] = device->PoRelay8->statusOut[0];
     device->request[4] = device->PoRelay8->statusOut[1];
     device->request[5] = device->PoRelay8->statusOut[2];
@@ -259,7 +259,7 @@ int32_t PK_PoRelay8_POILcommand(sPoKeysDevice* device, uint8_t CanMsgId, uint8_t
 {
     if (device == NULL) return PK_ERR_NOT_CONNECTED;
 
-    CreateRequest(device->request, 0x7B, 0x30, CanMsgId, CanMsgData);
+    CreateRequest(device->request, 0x7B, 0x30, CanMsgId, CanMsgData,0);
 
     return SendRequest(device);
 }
@@ -268,7 +268,7 @@ int32_t PK_PoRelay8_SendMessage2CanBus(sPoKeysDevice* device, uint8_t Flags, uin
 {
     if (device == NULL) return PK_ERR_NOT_CONNECTED;
 
-    CreateRequest(device->request, 0x7B, 0x40, Flags, CanMsgId);
-    device->request[5] = CanMsgData;
+    CreateRequest(device->request, 0x7B, 0x40, Flags, CanMsgId, CanMsgData);
+
     return SendRequest(device);
 }
