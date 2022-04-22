@@ -32,7 +32,7 @@ void PK_PoRelay8_DecodeStatus(sPoKeysDevice* device)
     device->PEv2.AxisEnabledStatesMask = ans[4];
     device->PEv2.LimitOverride = ans[5];
 
-    // Basic engine states
+    // Basic engine states  
     device->PEv2.PulseEngineEnabled = ans[8];
     device->PEv2.PulseEngineActivated = ans[9];
     device->PEv2.PulseEngineState = ans[10];
