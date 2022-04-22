@@ -1,6 +1,6 @@
 /*
 
-   Copyright (C) 2014 Matevž Bošnak (matevz@poscope.com)
+   Copyright (C) 2014 Matevï¿½ Boï¿½nak (matevz@poscope.com)
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Lesser General Public
@@ -351,6 +351,8 @@ typedef struct
     uint32_t iPulseEngine;                     // Device supports Pulse engine
     uint32_t iPulseEnginev2;                   // Device supports Pulse engine v2
     uint32_t iEasySensors;                     // Device supports EasySensors
+    uint32_t ikbd48CNC;                         // kbd48CNC was found in PoNet 
+    uint32_t iPoRelay8;                         // Count of PoRelay8Modules found
     uint32_t reserved[3];
 } sPoKeysDevice_Info;
 
@@ -664,6 +666,47 @@ typedef struct
 	uint8_t PoNETstatus;
 } sPoNETmodule;
 
+// PoRelay8 module data
+typedef struct
+{
+    uint8_t i2cAddress;
+    uint8_t TYPE[2];
+    uint8_t FW_ver[2];
+    uint32_t DeviceID;
+
+    uint8_t statusIn;
+    uint8_t statusOut;
+
+    /*
+    0 Device's I2C address 0x7B
+    1 PoExtBus daisy-chain position (data index) 0
+    2 CAN daisy-chain position (data index) 0
+    3 Number of PoRelay8 devices on CAN bus (additional
+    CAN frames are sent if more than 8 PoRelay8 devices
+    present)
+    10
+    4 Failsafe timeout (in ms) 5000
+    5 Disable CRC check on PoExtBus 0
+    6 CAN bus timing option
+    0 ï¿½ default CAN bitrate of 250 kbit/s
+    125 ï¿½ CAN bitrate of 125 kbit/s
+    250 ï¿½ CAN bitrate of 250 kbit/s
+    500 ï¿½ CAN bitrate of 500 kbit/s
+    1000 ï¿½ CAN bitrate of 1000 kbit/s
+    0
+    7 CAN bus message ID 0x108
+    8 PoIL master enable switch and PoIL core ID 0
+    */
+
+    uint8_t PoExtBus_Position;
+    uint8_t CAN_Position;
+    uint8_t CAN_PoRelayCount;
+    uint8_t Failsafe_timeout;
+    uint8_t DisableCRC;
+    uint8_t CAN_TimingOption;
+    uint8_t CAN_MessageID;
+    uint8_t POIL_MasterEnable;
+} sPoRelay8;
 
 // PoIL-related structures
 
@@ -899,6 +942,8 @@ typedef struct
     uint8_t					  multiPartData[448];			 // Multi-part request buffer
     uint64_t                  reserved64;
     uint8_t*                  multiPartBuffer;
+    sPoNETmodule*              kbd48CNC;
+    sPoRelay8*                 PoRelay8;
 } sPoKeysDevice;
 
 
@@ -1139,7 +1184,7 @@ POKEYSDECL int32_t PK_I2CGetStatus(sPoKeysDevice* device, uint8_t* activated);
 // Execute write to the specified address. iDataLength specifies how many bytes should be sent from the buffer (0 to 32)
 POKEYSDECL int32_t PK_I2CWriteStart(sPoKeysDevice* device, uint8_t address, uint8_t* buffer, uint8_t iDataLength);
 POKEYSDECL int32_t PK_I2CWriteAndReadStart(sPoKeysDevice* device, uint8_t address, uint8_t* buffer, uint8_t iDataLengthWrite, uint8_t iDataLengthRead);
-// Get write operation status (1 if successfull, 0 unsuccessfull, 0x10 – operation still executing)
+// Get write operation status (1 if successfull, 0 unsuccessfull, 0x10 ï¿½ operation still executing)
 POKEYSDECL int32_t PK_I2CWriteStatusGet(sPoKeysDevice* device, uint8_t* status);
 // Execute read from the specified address. iDataLength specifies how many bytes should be requested
 POKEYSDECL int32_t PK_I2CReadStart(sPoKeysDevice* device, uint8_t address, uint8_t iDataLength);
@@ -1232,7 +1277,20 @@ POKEYSDECL int32_t PK_CANRead(sPoKeysDevice* device, sPoKeysCANmsg * msg, uint8_
 POKEYSDECL int32_t PK_WS2812_Update(sPoKeysDevice* device, uint16_t LEDcount, uint8_t updateFlag);
 POKEYSDECL int32_t PK_WS2812_SendLEDdata(sPoKeysDevice* device, uint32_t * LEDdata, uint16_t startLED, uint8_t LEDcount);
 
-
+// PoRelay8 commands
+POKEYSDECL int32_t PK_PoRelay8_DeviceIdentification(sPoKeysDevice* device);
+POKEYSDECL int32_t PK_PoRelay8_ConfigurationRead(sPoKeysDevice* device);
+POKEYSDECL int32_t PK_PoRelay8_ConfigurationWrite(sPoKeysDevice* device);
+POKEYSDECL int32_t PK_PoRelay8_ConfigurationSave(sPoKeysDevice* device);
+POKEYSDECL int32_t PK_PoRelay8_SetOutputs(sPoKeysDevice* device);
+POKEYSDECL int32_t PK_PoRelay8_SetOutputsArray(sPoKeysDevice* device);
+POKEYSDECL int32_t PK_PoRelay8_ReEnablePoExtBus(sPoKeysDevice* device);
+POKEYSDECL int32_t PK_PoRelay8_POILcommand(sPoKeysDevice* device, uint8_t CanMsgId,  uint8_t CanMsgData);
+POKEYSDECL int32_t PK_PoRelay8_SendMessage2CanBus(sPoKeysDevice* device);
+POKEYSDECL int32_t PK_PoRelay8_CanStateUpdate(sPoKeysDevice* device);
+POKEYSDECL int32_t PK_PoRelay8_CanStateUpdate2(sPoKeysDevice* device);
+POKEYSDECL int32_t PK_PoRelay8_CanStateUpdateSingle(sPoKeysDevice* device);
+POKEYSDECL int32_t PK_PoRelay8_CanGeneral(sPoKeysDevice* device);
 
 // Simplified interface...
 POKEYSDECL void PK_SL_SetPinFunction(sPoKeysDevice* device, uint8_t pin, uint8_t function);
