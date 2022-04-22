@@ -942,8 +942,8 @@ typedef struct
     uint8_t					  multiPartData[448];			 // Multi-part request buffer
     uint64_t                  reserved64;
     uint8_t*                  multiPartBuffer;
-    sPoNETmodule*              kbd48CNC;
-    sPoRelay8*                 PoRelay8;
+    sPoNETmodule              kbd48CNC;
+    sPoRelay8                 PoRelay8;
 } sPoKeysDevice;
 
 
