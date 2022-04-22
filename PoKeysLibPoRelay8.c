@@ -244,7 +244,11 @@ int32_t PK_PoRelay8_ReEnablePoExtBus(sPoKeysDevice* device)
     return SendRequest(device);
 }
 
+<<<<<<< HEAD
 int32_t PK_PoRelay8_POILcommand(sPoKeysDevice* device, uint8_t CanMsgId, uint8_t CanMsgData)
+=======
+int32_t PK_PoRelay8_POILcommand(sPoKeysDevice* device, uint8_t CanMsgId, , uint8_t CanMsgData)
+>>>>>>> 65343a9761f62abaa17d5acab6623eeebb71bdc9
 {
     if (device == NULL) return PK_ERR_NOT_CONNECTED;
 
