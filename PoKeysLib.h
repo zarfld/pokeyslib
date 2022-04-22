@@ -675,7 +675,7 @@ typedef struct
     uint32_t DeviceID;
 
     uint8_t statusIn;
-    uint8_t statusOut;
+    uint8_t statusOut[10];
 
     /*
     0 Device's I2C address 0x7B

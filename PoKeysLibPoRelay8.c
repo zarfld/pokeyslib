@@ -113,7 +113,7 @@ Index   Description                                         Default value
 int32_t PK_PoRelay8_ConfigurationRead(sPoKeysDevice* device) // Retrieves I2C bus activation status
 {
     if (device == NULL) return PK_ERR_NOT_CONNECTED;
-
+    int i;
     for (i = 0; i < 9; i++)
     {
         uint8_t chkSum;
@@ -161,7 +161,7 @@ int32_t PK_PoRelay8_ConfigurationRead(sPoKeysDevice* device) // Retrieves I2C bu
 int32_t PK_PoRelay8_ConfigurationWrite(sPoKeysDevice* device)
 {
     if (device == NULL) return PK_ERR_NOT_CONNECTED;
-
+    int i;
     for (i = 0; i < 9; i++)
     {
         uint8_t chkSum;
@@ -221,7 +221,8 @@ int32_t PK_PoRelay8_SetOutputs(sPoKeysDevice* device)
     if (device == NULL) return PK_ERR_NOT_CONNECTED;
 
     CreateRequest(device->request, 0x7B, 0xA5, 0, 0, 0);
-    device->request[3] = device->PoRelay8->statusOut;
+    device->request[3] = device->PoRelay8->statusOut[0];
+
     return SendRequest(device);
 }
 
@@ -229,9 +230,19 @@ int32_t PK_PoRelay8_SetOutputsArray(sPoKeysDevice* device)
 {
     if (device == NULL) return PK_ERR_NOT_CONNECTED;
 
-    if (iDataLength > 32) iDataLength = 32;
 
-    CreateRequest(device->request, 0xDB, 0x20, address, iDataLength, 0);
+    CreateRequest(device->request, 0x7B, 0xA5, 0, 0, 0);
+    device->request[3] = device->PoRelay8->statusOut[0];
+    device->request[4] = device->PoRelay8->statusOut[1];
+    device->request[5] = device->PoRelay8->statusOut[2];
+    device->request[6] = device->PoRelay8->statusOut[3];
+    device->request[7] = device->PoRelay8->statusOut[4];
+    device->request[8] = device->PoRelay8->statusOut[5];
+    device->request[9] = device->PoRelay8->statusOut[6];
+    device->request[10] = device->PoRelay8->statusOut[7];
+    device->request[11] = device->PoRelay8->statusOut[8];
+    device->request[12] = device->PoRelay8->statusOut[9];
+
     return SendRequest(device);
 }
 
