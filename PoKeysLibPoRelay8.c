@@ -237,11 +237,10 @@ int32_t PK_PoRelay8_SetOutputs(sPoKeysDevice* device)
 int32_t PK_PoRelay8_SetOutputsArray(sPoKeysDevice* device)
 {
     if (device == NULL) return PK_ERR_NOT_CONNECTED;
-    uint8_t chkSum;
 
     CreateRequest(device->request, 0x7B, 0x21, 0, 0, 0);
-    device->request[3] = 0x7B;
-    device->request[3] = 0x21;
+    device->request[1] = 0x7B;
+    device->request[2] = 0x21;
     device->request[3] = device->PoRelay8.statusOut[0];
     device->request[4] = device->PoRelay8.statusOut[1];
     device->request[5] = device->PoRelay8.statusOut[2];
@@ -254,8 +253,7 @@ int32_t PK_PoRelay8_SetOutputsArray(sPoKeysDevice* device)
     device->request[12] = device->PoRelay8.statusOut[9];
 
 
-    chkSum = getChecksum(device->request);
-    device->request[13] = chkSum;
+    device->request[13] = getChecksum(device->request);
 
     if (SendRequest(device) == PK_OK)
     {
