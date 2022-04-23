@@ -235,7 +235,7 @@ int32_t PK_PoRelay8_SetOutputsArray(sPoKeysDevice* device)
     CreateRequest(device->request, 0x7B, 0x21, 0, 0, 0);
     device->request[3] = 0x7B;
     device->request[3] = 0x21;
-    device->request[3] = device->PoRelay8.statusOut[0];
+    /*device->request[3] = device->PoRelay8.statusOut[0];
     device->request[4] = device->PoRelay8.statusOut[1];
     device->request[5] = device->PoRelay8.statusOut[2];
     device->request[6] = device->PoRelay8.statusOut[3];
@@ -244,7 +244,19 @@ int32_t PK_PoRelay8_SetOutputsArray(sPoKeysDevice* device)
     device->request[9] = device->PoRelay8.statusOut[6];
     device->request[10] = device->PoRelay8.statusOut[7];
     device->request[11] = device->PoRelay8.statusOut[8];
-    device->request[12] = device->PoRelay8.statusOut[9];
+    device->request[12] = device->PoRelay8.statusOut[9];*/
+
+    device->request[3] = 0xFF;
+    device->request[4] = device->PoRelay8.statusOut[1];
+    device->request[5] = device->PoRelay8.statusOut[2];
+    device->request[6] = device->PoRelay8.statusOut[3];
+    device->request[7] = device->PoRelay8.statusOut[4];
+    device->request[8] = device->PoRelay8.statusOut[5];
+    device->request[9] = device->PoRelay8.statusOut[6];
+    device->request[10] = device->PoRelay8.statusOut[7];
+    device->request[11] = device->PoRelay8.statusOut[8];
+    device->request[12] = 0x01;
+
     chkSum = getChecksum(device->request);
     device->request[13] = chkSum;
 
