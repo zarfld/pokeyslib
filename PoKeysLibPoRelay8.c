@@ -266,7 +266,7 @@ int32_t PK_PoRelay8_SetOutputsArray(sPoKeysDevice* device)
         chkSum = getChecksum(device->request);
         device->request[13] = chkSum;
 
-        return (SendRequest(device);
+        return SendRequest(device);
     }
     else
     {
